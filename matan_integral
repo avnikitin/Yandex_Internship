@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <iomanip>
+
+using namespace std;
+
+typedef long double ld;
+
+ld f(ld x) {
+	return pow(2, x * x - 2 * x);
+}
+
+ld calc_upper_bound(ld l, ld r) {
+	return max(f(l), f(r));
+}
+
+ld calc_lower_bound(ld l, ld r) {
+	if (l <= 1 && 1 <= r)
+		return f(1);
+	return min(f(l), f(r));
+}
+
+int main() {
+	//freopen("output.txt", "w", stdout);
+	cout.precision(8);
+	vector <int> sample = { 10,
+							            100,
+							            1000,
+							            10000,
+                          100000,
+                          1000000,
+                          10000000 };
+	for (int N : sample) {
+		ld upperSum = 0, lowerSum = 0;
+		for (int i = 0; i < N; i++) {
+			ld l = ld(3) * i / N;
+			ld r = ld(3) * ld(i + 1) / N;
+			upperSum += calc_upper_bound(l, r);
+			lowerSum += calc_lower_bound(l, r);
+		}
+		lowerSum *= 3;
+		lowerSum /= N;
+		upperSum *= 3;
+		upperSum /= N;
+		cout << N << ": " << lowerSum << ' ' << upperSum << ' ' << upperSum - lowerSum << '\n';
+	}
+	return 0;
+}

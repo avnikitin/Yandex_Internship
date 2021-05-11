@@ -1,0 +1,57 @@
+#include <array>
+#include <iostream>
+
+using namespace std;
+
+template <unsigned N, unsigned M>
+using Matrix = array <array <long long, M>, N>;
+
+template<unsigned N, unsigned K, unsigned M>
+Matrix <N, M> operator *(const Matrix<N, K>& a, const Matrix<K, M>& b)
+{
+	Matrix <N, M> c;
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < M; j++)
+			c[i][j] = 0;
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < M; j++)
+			for (int k = 0; k < K; k++)
+				c[i][j] += a[i][k] * b[k][j];
+	return c;
+}
+
+template<unsigned N, unsigned M>
+void print(const Matrix<N, M>& a) {
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++)
+			cout << a[i][j] << ' ';
+		cout << '\n';
+	}
+}
+
+const int N = 4;
+
+
+int main() {
+	
+  Matrix<N, N> A;
+  
+	cout << "print matrix\n";
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			cin >> A[i][j];
+	cout << "print required non-negative power\n";
+	int power;
+	cin >> power;
+  
+	Matrix<N, N> res; //eye matrix
+  for (int i = 0; i < N; i++)
+    for (int j = 0; j < N; j++)
+      res[i][j] = (i == j);
+  
+	while (power--) {
+		res = res * A;
+	}
+	print(res);
+	return 0;
+}
